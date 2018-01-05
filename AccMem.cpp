@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "AccMem.h"
-
+using namespace am;
 
 AccMem::AccMem()
 {
@@ -51,6 +51,18 @@ DWORD AccMem::Module(LPSTR ModuleName) {
 
 	std::cout << "\nMODULE: Process Platform Invalid\n";
 	return 0;
+}
+
+int AccMem::FindMultiLevelPointer(DWORD base, am::offset o) {
+	DWORD prev = base;
+	DWORD cur = 0;
+	for (int i = 0; i < o.size - 1; i++) {
+		cur = Read<int>(prev + o.offsets[i]);
+		prev = cur;
+	}
+	int final_offset = o.offsets[o.size - 1];
+	DWORD returned_address = prev + final_offset;
+	return prev + final_offset;
 }
 
 AccMem::~AccMem()
