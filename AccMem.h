@@ -4,11 +4,19 @@
 #include <TlHelp32.h>
 #include <string>
 #include <sstream>
+
 namespace am {
 	struct offset {
 		int size;
 		const int *offsets;
+
 	};
+	template<typename...T>
+	offset offset_arr(const T& ...k) {
+		int *to_populate = new int[sizeof...(k)]{ k... };
+		return{ sizeof...(k), to_populate };
+	}
+
 	class AccMem
 	{
 	public:
